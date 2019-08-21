@@ -3,7 +3,7 @@ const Movie = require('../models/movie')
 const auth = require('../middleware/auth')
 const router = new express.Router()
 
-router.post('/movies', auth, async (req, res) => {
+router.post('/api/movies', auth, async (req, res) => {
 
 	const movie = new Movie({
 		...req.body,
@@ -17,7 +17,7 @@ router.post('/movies', auth, async (req, res) => {
 	}
 })
 
-router.get('/movies', auth, async (req, res) => {
+router.get('/api/movies', async (req, res) => {
 	const sort = {};
 	let limit = 10;
 	let skip;
@@ -38,7 +38,6 @@ router.get('/movies', auth, async (req, res) => {
 	try {
 		await Movie.find()
 			.populate('owner', 'name')
-			.populate('reviews', 'status owner', { owner: req.user._id})
 			.lean()
 			.sort(sort)
 			.limit(limit)
@@ -51,7 +50,42 @@ router.get('/movies', auth, async (req, res) => {
 	}
 })
 
-router.get('/movies/:id', auth, async (req, res) => {
+router.get('/api/movies/:userId', auth, async (req, res) => {
+	const _userId = req.params.userId;
+	const sort = {};
+	let limit = 10;
+	let skip;
+
+	if (req.query.sortBy) {
+		const parts = req.query.sortBy.split(':')
+		sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
+	}
+
+	if (req.query.limit) {
+		limit = req.query.limit;
+	}
+
+	if (req.query.page) {
+		skip = parseInt(req.query.page);
+	}
+
+	try {
+		await Movie.find()
+			.populate('owner', 'name')
+			.populate('reviews', 'status owner', { owner: _userId })
+			.lean()
+			.sort(sort)
+			.limit(limit)
+			.skip(skip)
+			.exec(function (err, movies) {
+				res.send(movies)
+			});
+	} catch (e) {
+		res.status(500).send()
+	}
+})
+
+router.get('/api/movie/:id', auth, async (req, res) => {
 	const _id = req.params.id
 	try {
 		const movie = await Movie.findOne({ _id, owner: req.user._id })
@@ -64,7 +98,7 @@ router.get('/movies/:id', auth, async (req, res) => {
 	}
 })
 
-router.patch('/movies/:id', auth, async (req, res) => {
+router.patch('/api/movies/:id', auth, async (req, res) => {
 	const updates = Object.keys(req.body)
 	const allowedUpdates = ['description', 'completed']
 

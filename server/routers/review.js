@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 const router = new express.Router();
 const Movie = require('../models/movie');
 
-router.post('/reviews/:movieId', auth, async (req, res) => {
+router.post('/api/reviews/:movieId', auth, async (req, res) => {
 
 	const userId = req.user._id;
 	const movieId = req.params.movieId;
@@ -35,7 +35,7 @@ router.post('/reviews/:movieId', auth, async (req, res) => {
 	}
 });
 
-router.patch('/reviews/:reviewId', auth, async (req, res) => {
+router.patch('/api/reviews/:reviewId', auth, async (req, res) => {
 	const updates = Object.keys(req.body);
 	const allowedUpdates = ['status'];
 

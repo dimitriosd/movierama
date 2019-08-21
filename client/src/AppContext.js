@@ -1,0 +1,120 @@
+import React, {Component} from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+const api = axios.create();
+
+api.interceptors.request.use((config) => {
+	const token = Cookies.get('token');
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
+});
+
+const AppContext = React.createContext();
+
+export class AppContextProvider extends Component {
+
+	constructor() {
+		super();
+		this.state = {
+			movies: [],
+			user: Cookies.getJSON('user') || null,
+			token: Cookies.get('token') || ""
+		}
+	}
+
+	componentDidMount() {
+		this.getMovies();
+	}
+
+	getMovies = () => {
+		const _userId = this.state.user ? this.state.user._id : '';
+		return api.get(`/api/movies/${_userId}`)
+			.then(response => {
+				this.setState({
+					movies: response.data
+				})
+				return response;
+			})
+	}
+
+	signup = (userInfo) => {
+		return api.post("/api/users", userInfo)
+			.then(response => {
+				const { user, token } = response.data;
+				Cookies.set("token", token);
+				Cookies.set("user", user);
+				this.setState({
+					user,
+					token
+				});
+				this.getMovies();
+				return response;
+			})
+	}
+
+	login = (credentials) => {
+		return api.post("/api/users/login", credentials)
+			.then(response => {
+				const { token, user } = response.data;
+				Cookies.set("token", token)
+				Cookies.set("user", user)
+				this.setState({
+					user,
+					token
+				});
+				this.getMovies();
+				return response;
+			})
+	}
+
+	logout = () => {
+		Cookies.remove("user");
+		Cookies.remove("token");
+		this.setState({
+			stories: [],
+			user: null,
+			token: ""
+		});
+		this.getMovies();
+	}
+
+	render() {
+		return (
+			<AppContext.Provider
+				value={{
+					getMovies: this.getMovies,
+					signup: this.signup,
+					login: this.login,
+					logout: this.logout,
+					...this.state
+				}}
+			>
+
+				{this.props.children}
+
+			</AppContext.Provider>
+		)
+	}
+}
+
+export const withContext = Component => {
+	return props => {
+		return (
+			<AppContext.Consumer>
+				{
+					globalState => {
+						return (
+							<Component
+								{...globalState}
+								{...props}
+							/>
+						)
+					}
+				}
+			</AppContext.Consumer>
+		)
+	}
+};
