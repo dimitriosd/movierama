@@ -9,12 +9,21 @@ const MoviesList = (props) => {
 		props.getMovies(event, 'desc');
 	}
 
+	const isAllowedToReview = (movie) => {
+		const moviesWithReviews = props.movies.filter(movie =>
+			movie.reviews.length > 0
+		)
+		const isOwnMovie = moviesWithReviews.find((currentMovie) => movie._id === currentMovie._id)
+		return !isOwnMovie;
+	}
+
 	const movies = props.movies.map(movie => {
 		return (
 			<Movie
 				key={movie._id}
 				movie={movie}
 				user={props.user ? props.user._id : null}
+				isAllowedToReview={isAllowedToReview}
 			/>
 		)
 	});

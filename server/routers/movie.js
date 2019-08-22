@@ -59,7 +59,7 @@ router.get('/api/movies', async (req, res) => {
 router.get('/api/movies/:userId', auth, async (req, res) => {
 	const _userId = req.params.userId;
 	let sort = {};
-	let limit = 10;
+	let limit = 50;
 	let skip;
 
 	if (req.query.sortBy) {

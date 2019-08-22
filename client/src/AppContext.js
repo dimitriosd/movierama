@@ -69,7 +69,14 @@ export class AppContextProvider extends Component {
 				this.getMovies();
 				return response;
 			})
-	}
+	};
+
+	addReview = (storyId, reviewInfo) => {
+		return api.post(`/api/reviews/${storyId}`, reviewInfo)
+			.then(response => {
+				return response;
+			})
+	};
 
 	login = (credentials) => {
 		return api.post("/api/users/login", credentials)
@@ -108,7 +115,7 @@ export class AppContextProvider extends Component {
 					login: this.login,
 					logout: this.logout,
 					addMovie: this.addMovie,
-					handleSortChange: this.handleSortChange,
+					addReview: this.addReview,
 					...this.state
 				}}
 			>
