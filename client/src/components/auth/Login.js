@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withContext } from "./../../AppContext"
+import { withContext } from "./../../AppContext";
 
 class LoginForm extends Component {
 	constructor() {
@@ -29,30 +29,36 @@ class LoginForm extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.login(this.state)
-			.then(() => this.props.history.push("/stories"))
+			.then(() => this.props.history.push("/movies"))
 			.catch(err => {
 				this.setState({errorMessage: err.response.data.message})
 			})
 	}
 
 	render() {
+		if (this.props.user) {
+			this.props.history.push("/movies");
+		}
+
 		return (
 			<div className="form-wrapper">
 				<form onSubmit={this.handleSubmit}>
-					<h3>Log In</h3>
+					<h3>Please enter your credentials</h3>
 					<input
 						onChange={this.handleChange}
 						value={this.state.username}
 						name="name"
 						type="text"
-						placeholder="name"/>
+						placeholder="Name..."
+						required="required"/>
 					<input
 						onChange={this.handleChange}
 						value={this.state.password}
 						name="password"
 						type="password"
-						placeholder="password"/>
-					<button type="submit">Submit</button>
+						placeholder="Password..."
+						required="required"/>
+					<button className="submit-button" type="submit">Login</button>
 				</form>
 
 				{

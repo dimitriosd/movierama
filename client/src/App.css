@@ -1,33 +1,191 @@
-.App {
+.navbar-wrapper {
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: black;
+  opacity: 0.8;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.title a {
+  text-decoration: none;
+  color: lightgray;
+}
+.nav-link {
+  padding: 10px;
+}
+
+.nav-link a {
+  color: dodgerblue;
+}
+
+.signup {
+  border-radius: 20px;
+  background-color: dodgerblue;
+  text-decoration: none;
+  outline: none;
+  width: 80px;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.signup a {
+  color: white;
+  text-decoration: none;
+}
+
+.login span {
+  padding: 10px;
+  color: white;
+}
+
+.logged {
+  display: flex;
+  align-items: center;
+}
+
+.logged button {
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: white;
+  text-decoration: none;
+  outline: none;
+  width: 80px;
+  height: 30px;
+}
+
+.welcome-msg {
+  margin-right: 20px;
+  color: white;
+}
+
+.link {
+  text-decoration: underline;
+  color: dodgerblue;
+  cursor: pointer;
+}
+
+.sort-link {
+  text-decoration: underline;
+  color: dodgerblue;
+  cursor: pointer;
+}
+
+.sort-link-clicked {
+  text-decoration: none;
+  color: darkblue;
+  cursor: default;
   pointer-events: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.options-wrapper {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: lightgray;
+}
+
+.sorting {
+  display: flex;
+  align-items: center;
+}
+
+.sorting > * {
+  margin-right: 10px;
+}
+
+.options-wrapper button {
+  cursor: pointer;
+  border-radius: 20px;
+  color: white;
+  background-color: green;
+  opacity: 0.8;
+  text-decoration: none;
+  outline: none;
+  width: 120px;
+  height: 30px;
+  border: none;
+  font-weight: bold;
+}
+
+.movie-wrapper {
+  padding: 10px 20px;
+  border: 2px solid black;
+  margin: 10px auto;
+}
+
+.form-wrapper {
+  max-width: 375px;
+  margin: 40px auto;
+  border: 2px solid dodgerblue;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: aliceblue;
+}
+
+.form-wrapper form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.form-wrapper input {
+  width: 70%;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid dodgerblue;
+  margin-bottom: 10px;
+}
+
+.form-wrapper textarea {
+  width: 70%;
+  height: 120px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid dodgerblue;
+  margin-bottom: 10px;
+  resize: none;
+}
+
+.submit-button {
+  cursor: pointer;
+  border-radius: 20px;
   color: white;
+  background-color: dodgerblue;
+  opacity: 0.8;
+  text-decoration: none;
+  outline: none;
+  height: 30px;
+  border: none;
+  font-weight: bold;
+  min-width: 80px;
 }
 
-.App-link {
-  color: #61dafb;
+.movie-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 2px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.posted-by {
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.movie-description {
+  font-size: 16px;
+  font-style: italic;
+}
+
+.movie-reviews {
+  margin-top: 16px;
+  font-size: 14px;
 }

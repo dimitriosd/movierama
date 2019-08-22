@@ -4,7 +4,6 @@ const auth = require('../middleware/auth')
 const router = new express.Router()
 
 router.post('/api/movies', auth, async (req, res) => {
-
 	const movie = new Movie({
 		...req.body,
 		owner: req.user._id
@@ -18,17 +17,24 @@ router.post('/api/movies', auth, async (req, res) => {
 })
 
 router.get('/api/movies', async (req, res) => {
-	const sort = {};
+	let sort = {};
+	const match = {};
 	let limit = 10;
 	let skip;
+
+	if (req.query.owner) {
+		match.owner = req.query.owner;
+	}
 
 	if (req.query.sortBy) {
 		const parts = req.query.sortBy.split(':')
 		sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
+	} else {
+		sort = { createdAt: -1 }
 	}
 
 	if (req.query.limit) {
-		limit = req.query.limit;
+		limit = parseInt(req.query.limit);
 	}
 
 	if (req.query.page) {
@@ -36,7 +42,7 @@ router.get('/api/movies', async (req, res) => {
 	}
 
 	try {
-		await Movie.find()
+		await Movie.find(match)
 			.populate('owner', 'name')
 			.lean()
 			.sort(sort)
@@ -52,13 +58,15 @@ router.get('/api/movies', async (req, res) => {
 
 router.get('/api/movies/:userId', auth, async (req, res) => {
 	const _userId = req.params.userId;
-	const sort = {};
+	let sort = {};
 	let limit = 10;
 	let skip;
 
 	if (req.query.sortBy) {
 		const parts = req.query.sortBy.split(':')
 		sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
+	} else {
+		sort = { createdAt: -1 }
 	}
 
 	if (req.query.limit) {
@@ -86,7 +94,8 @@ router.get('/api/movies/:userId', auth, async (req, res) => {
 })
 
 router.get('/api/movie/:id', auth, async (req, res) => {
-	const _id = req.params.id
+	const _id = req.params.id;
+	console.log(req.user._id);
 	try {
 		const movie = await Movie.findOne({ _id, owner: req.user._id })
 		if (!movie) {

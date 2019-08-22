@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { withContext } from "./../../AppContext";
+import { withContext } from "./../AppContext";
 
-class Signup extends Component {
+class NewMovie extends Component {
 	constructor() {
 		super();
 		this.state = {
-			name: "",
-			password: "",
+			title: "",
+			description: "",
 			errorMessage: ""
 		}
 	}
@@ -18,17 +18,9 @@ class Signup extends Component {
 		})
 	}
 
-	clearInputs = () => {
-		this.setState({
-			name: "",
-			password: "",
-			errorMessage: ""
-		})
-	}
-
 	handleSubmit = (e) => {
 		e.preventDefault();
-		this.props.signup(this.state)
+		this.props.addMovie(this.state)
 			.then(() => this.props.history.push("/movies"))
 			.catch(err => {
 				this.setState({errorMessage: err.response.data.message})
@@ -36,29 +28,26 @@ class Signup extends Component {
 	}
 
 	render() {
-		if (this.props.user) {
-			this.props.history.push("/movies");
-		}
-
 		return (
 			<div className="form-wrapper">
 				<form onSubmit={this.handleSubmit}>
-					<h3>Please enter your credentials</h3>
+					<h3>Please add movie details</h3>
 					<input
 						onChange={this.handleChange}
-						value={this.state.name}
-						name="name"
+						value={this.state.title}
+						name="title"
 						type="text"
-						placeholder="Name..."
+						placeholder="Title..."
 						required="required"/>
-					<input
+					<textarea
 						onChange={this.handleChange}
-						value={this.state.password}
-						name="password"
-						type="password"
-						placeholder="Password..."
-						required="required"/>
-					<button className="submit-button" type="submit">Sign Up</button>
+						value={this.state.description}
+						name="description"
+						type="description"
+						placeholder="Description..."
+						required="required"
+					/>
+					<button className="submit-button" type="submit">Add</button>
 				</form>
 
 				{
@@ -71,7 +60,4 @@ class Signup extends Component {
 	}
 }
 
-export default withContext(Signup);
-
-
-
+export default withContext(NewMovie);

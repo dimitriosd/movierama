@@ -5,8 +5,12 @@ import Navbar from "./components/Navbar";
 import Signup from "./components/auth/Signup";
 import Login from "./components/auth/Login";
 import MoviesList from "./components/MoviesList";
+import NewMovie from "./components/NewMovie";
+import ProtectedRoute from "./components/auth/ProtectedRoute"
 
-const App = () =>{
+import "./App.css";
+
+const App = () => {
   return (
     <div className="app-wrapper">
       <Navbar/>
@@ -14,7 +18,8 @@ const App = () =>{
         <Route path="/signup" component={Signup}/>
         <Route path="/login" component={Login}/>
         <Route path="/movies" component={MoviesList}/>
-        {/*<Route exact path="/" render={() => <Redirect to="/stories"/>}/>*/}
+        <ProtectedRoute path="/add" component={NewMovie}/>
+        <Route exact path="/" render={() => <Redirect to="/movies"/>}/>
       </Switch>
     </div>
   )

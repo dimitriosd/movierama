@@ -20,6 +20,8 @@ export class AppContextProvider extends Component {
 		super();
 		this.state = {
 			movies: [],
+			sortBy: 'createdAt',
+			order: 'desc',
 			user: Cookies.getJSON('user') || null,
 			token: Cookies.get('token') || ""
 		}
@@ -29,16 +31,30 @@ export class AppContextProvider extends Component {
 		this.getMovies();
 	}
 
-	getMovies = () => {
+	getMovies = (sortBy, order) => {
 		const _userId = this.state.user ? this.state.user._id : '';
-		return api.get(`/api/movies/${_userId}`)
+		return api.get(`/api/movies/${_userId}`, {
+			params: {
+				sortBy: `${sortBy || this.state.sortBy}:${order || this.state.order}`
+			}
+		})
 			.then(response => {
 				this.setState({
-					movies: response.data
+					movies: response.data,
+					sortBy: sortBy ? sortBy : 'createdAt',
+					order: order ? order : 'desc'
 				})
 				return response;
 			})
-	}
+	};
+
+	addMovie = (movieInfo) => {
+		return api.post("/api/movies", movieInfo)
+			.then(response => {
+				this.getMovies();
+				return response;
+			})
+	};
 
 	signup = (userInfo) => {
 		return api.post("/api/users", userInfo)
@@ -64,9 +80,10 @@ export class AppContextProvider extends Component {
 				this.setState({
 					user,
 					token
+				}, () => {
+					this.getMovies();
+					return response;
 				});
-				this.getMovies();
-				return response;
 			})
 	}
 
@@ -74,11 +91,12 @@ export class AppContextProvider extends Component {
 		Cookies.remove("user");
 		Cookies.remove("token");
 		this.setState({
-			stories: [],
+			movies: [],
 			user: null,
 			token: ""
+		}, () => {
+			this.getMovies();
 		});
-		this.getMovies();
 	}
 
 	render() {
@@ -89,6 +107,8 @@ export class AppContextProvider extends Component {
 					signup: this.signup,
 					login: this.login,
 					logout: this.logout,
+					addMovie: this.addMovie,
+					handleSortChange: this.handleSortChange,
 					...this.state
 				}}
 			>
