@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import { withContext } from "./../AppContext"
+import {withContext} from "./../AppContext"
 
 const Navbar = (props) => {
 	let loggedInWrapper;
@@ -12,7 +12,7 @@ const Navbar = (props) => {
 
 			<div className="nav-link logged">
 				<div className="welcome-msg">
-					Welcome back <span className="link">{props.user.name}</span>
+					Welcome back <span className="link" onClick={() => props.getMovies(null, null, props.user._id)}>{props.user.name}</span>
 				</div>
 				<button onClick={() => props.logout()}>Logout</button>
 			</div>

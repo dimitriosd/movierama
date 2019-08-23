@@ -72,7 +72,7 @@ router.patch('/api/reviews/:reviewId', auth, async (req, res) => {
 	}
 });
 
-router.delete('/reviews/:reviewId', auth, async (req, res) => {
+router.delete('/api/reviews/:reviewId', auth, async (req, res) => {
 	try {
 		let reviewToDelete = null;
 		await Review.findOneAndDelete({ _id: req.params.reviewId, owner: req.user._id })
@@ -133,6 +133,6 @@ const changeFromDislikeToLike = async (review) => {
 		{ _id: review.movie, dislikes: { $gte: 0 } },
 		{ $inc: { likes: 1, dislikes: -1 } }
 	)
-}
+};
 
-module.exports = router
+module.exports = router;

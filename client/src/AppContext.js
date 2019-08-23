@@ -31,11 +31,12 @@ export class AppContextProvider extends Component {
 		this.getMovies();
 	}
 
-	getMovies = (sortBy, order) => {
+	getMovies = (sortBy, order, owner) => {
 		const _userId = this.state.user ? this.state.user._id : '';
 		return api.get(`/api/movies/${_userId}`, {
 			params: {
-				sortBy: `${sortBy || this.state.sortBy}:${order || this.state.order}`
+				sortBy: `${sortBy || this.state.sortBy}:${order || this.state.order}`,
+				owner
 			}
 		})
 			.then(response => {
@@ -73,6 +74,20 @@ export class AppContextProvider extends Component {
 
 	addReview = (storyId, reviewInfo) => {
 		return api.post(`/api/reviews/${storyId}`, reviewInfo)
+			.then(response => {
+				return response;
+			})
+	};
+
+	updateReview = (reviewId, reviewInfo) => {
+		return api.patch(`/api/reviews/${reviewId}`, reviewInfo)
+			.then(response => {
+				return response;
+			})
+	};
+
+	deleteReview = (reviewId) => {
+		return api.delete(`/api/reviews/${reviewId}`)
 			.then(response => {
 				return response;
 			})
@@ -116,6 +131,8 @@ export class AppContextProvider extends Component {
 					logout: this.logout,
 					addMovie: this.addMovie,
 					addReview: this.addReview,
+					updateReview: this.updateReview,
+					deleteReview: this.deleteReview,
 					...this.state
 				}}
 			>

@@ -58,9 +58,15 @@ router.get('/api/movies', async (req, res) => {
 
 router.get('/api/movies/:userId', auth, async (req, res) => {
 	const _userId = req.params.userId;
+
 	let sort = {};
+	const match = {};
 	let limit = 50;
 	let skip;
+
+	if (req.query.owner) {
+		match.owner = req.query.owner;
+	}
 
 	if (req.query.sortBy) {
 		const parts = req.query.sortBy.split(':')
@@ -78,7 +84,7 @@ router.get('/api/movies/:userId', auth, async (req, res) => {
 	}
 
 	try {
-		await Movie.find()
+		await Movie.find(match)
 			.populate('owner', 'name')
 			.populate('reviews', 'status owner', { owner: _userId })
 			.lean()
@@ -95,7 +101,6 @@ router.get('/api/movies/:userId', auth, async (req, res) => {
 
 router.get('/api/movie/:id', auth, async (req, res) => {
 	const _id = req.params.id;
-	console.log(req.user._id);
 	try {
 		const movie = await Movie.findOne({ _id, owner: req.user._id })
 		if (!movie) {

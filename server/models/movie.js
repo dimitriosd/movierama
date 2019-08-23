@@ -31,14 +31,14 @@ const movieSchema = new mongoose.Schema({
 	}
 }, {
 	timestamps: true
-})
+});
 
 movieSchema.virtual('reviews', {
 	ref: 'Review',
 	localField: '_id',
 	foreignField: 'movie'
-})
+});
 
-const Movie = mongoose.model('Movie', movieSchema)
+const Movie = mongoose.model('Movie', movieSchema);
 
-module.exports = Movie
+module.exports = Movie;

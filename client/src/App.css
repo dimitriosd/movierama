@@ -190,6 +190,30 @@
   font-size: 14px;
 }
 
+.review-link {
+  text-decoration: underline;
+  color: dodgerblue;
+  cursor: pointer;
+}
+
+.review-link-disabled {
+  text-decoration: none;
+  color: black;
+  cursor: initial;
+  pointer-events: none;
+}
+
+.review-msg {
+  display: inline-block;
+  float: right;
+}
+
+.no-movies-msg {
+  font-size: 24px;
+  margin: 20px auto;
+  text-align: center;
+}
+
 @media screen and (min-width: 700px) {
   .options-wrapper {
     padding: 10px 10%;

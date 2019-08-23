@@ -1,73 +1,207 @@
-import React from 'react';
+import React, {Component} from 'react';
 import moment from 'moment'
 
-
-const getDaysDiff = (date) => {
-	const now = moment(new Date());
-	const created = moment(date)
-	const diff = now.diff(created, 'days');
-	switch (diff) {
-		case 0:
-			return 'Today'
-		case 1:
-			return 'Yesterday'
-		default:
-			return `${diff} days ago`
+class Movie extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			status: props.movie.reviews && props.movie.reviews.length > 0 ? props.movie.reviews[0].status : 0,
+			likes: props.movie.likes,
+			hates: props.movie.dislikes,
+			userReviewId: props.movie.reviews && props.movie.reviews.length > 0 ? props.movie.reviews[0]._id : null
+		};
+		this.movie = props.movie;
+		this.user = props.user;
 	}
-};
 
-const getOwnerName = (currentUser, movieOwner) => currentUser === movieOwner._id ? 'You' : movieOwner.name
+	render() {
+		return (
+			<div className="movie-wrapper">
+				<div className="movie-title">{this.movie.title}</div>
+				<div className="posted-by">Posted by <span onClick={() => this.props.getMovies(null, null, this.movie.owner._id)}
+					className="link"> {this.getOwnerName()} </span>{this.getDaysDiff()}
+				</div>
+				<q className="movie-description">{this.movie.description}</q>
+				{this.user ? this.getAuthenticatedReviews(this.isOwner()) : this.getReviews()}
+			</div>
+		)
+	}
 
-const isOwner = (currentUser, movieOwner) => currentUser === movieOwner._id;
+	getDaysDiff() {
+		const date = this.movie.createdAt;
+		const now = moment(new Date()).startOf('day');
+		const created = moment(date).startOf('day');
+		const diff = now.diff(created, 'days');
+		switch (diff) {
+			case 0:
+				return 'Today'
+			case 1:
+				return 'Yesterday'
+			default:
+				return `${diff} days ago`
+		}
+	};
 
-const getReviews = (likes, hates) => {
-	let reviews;
-	if (likes > 0 || hates > 0) {
+	getOwnerName() {
+		return this.user === this.movie.owner._id ? 'You' : this.movie.owner.name;
+	}
+
+	isOwner() {
+		return this.user === this.movie.owner._id;
+	}
+
+	getReviews() {
+		const likes = this.state.likes;
+		const hates = this.state.hates;
+		let reviews;
+		if (likes > 0 || hates > 0) {
+			let likeText = likes === 1 ? 'like' : 'likes';
+			let hateText = hates === 1 ? 'hate' : 'hates';
+			reviews = (
+				<div className="movie-reviews">
+					<span>{likes} {likeText}</span>&nbsp;&nbsp; | &nbsp;&nbsp;
+					<span>{hates} {hateText}</span>
+				</div>
+			)
+		}
+		return reviews
+	}
+
+	getAuthenticatedReviews(isOwner) {
+		return isOwner ? this.getReviewAsOwner() : this.getReviewAsWatcher();
+	}
+
+	getReviewAsOwner() {
+		const likes = this.state.likes;
+		const hates = this.state.hates;
 		let likeText = likes === 1 ? 'like' : 'likes';
 		let hateText = hates === 1 ? 'hate' : 'hates';
-		reviews = (
+		return (
 			<div className="movie-reviews">
-				<span>{likes} {likeText}</span>&nbsp;&nbsp;| &nbsp;&nbsp;
+				<span>{likes} {likeText}</span>&nbsp;&nbsp; | &nbsp;&nbsp;
 				<span>{hates} {hateText}</span>
 			</div>
 		)
 	}
-	return reviews
-}
 
-const getAuthenticatedReviews = (likes, hates, isOwner) => {
-	let reviews;
-	if (likes > 0 || hates > 0) {
+	getReviewAsWatcher() {
+		const likes = this.state.likes;
+		const hates = this.state.hates;
+		let reviews;
+		if (likes === 0 && hates === 0) {
+			reviews = (
+				<div className="movie-reviews">
+					<span>Be the first one to vote for this movie:</span> &nbsp;&nbsp;
+					<span className="review-link" onClick={() => this.addReview(1)}>Like</span>&nbsp;&nbsp; | &nbsp;&nbsp;
+					<span className="review-link" onClick={() => this.addReview(-1)}>Hate</span>
+				</div>
+			)
+		} else {
+			reviews = this.state.status === 0 ? this.getNonReviewedContext() : this.getAlreadyReviewedContext();
+		}
+		return reviews
+	}
+
+	getAlreadyReviewedContext() {
+		const likes = this.state.likes;
+		const hates = this.state.hates;
+		const likeText = likes === 1 ? 'like' : 'likes';
+		const hateText = hates === 1 ? 'hate' : 'hates';
+		const status = this.state.status === 1 ? 'like' : 'hate';
+		const likeButton = <span onClick={() => this.updateReview(1)}
+		                         className={`review-link ${this.state.status === 1 ? 'review-link-disabled' : ''}`}>{likes} {likeText}</span>;
+		const hateButton = <span onClick={() => this.updateReview(-1)}
+		                         className={`review-link ${this.state.status === -1 ? 'review-link-disabled' : ''}`}>{hates} {hateText}</span>;
+
+		const reviews = (
+			<div className="movie-reviews">
+				{likeButton}&nbsp;&nbsp;| &nbsp;&nbsp;
+				{hateButton}
+				<div className="review-msg">
+					<span>You {status} this movie</span>&nbsp;&nbsp; | &nbsp;&nbsp;
+					<span onClick={() => this.deleteReview()} className="review-link">Un{status}</span>
+				</div>
+			</div>
+
+		)
+		return reviews
+
+	}
+
+	getNonReviewedContext() {
+		const likes = this.state.likes;
+		const hates = this.state.hates;
+		let reviews;
 		let likeText = likes === 1 ? 'like' : 'likes';
 		let hateText = hates === 1 ? 'hate' : 'hates';
 		reviews = (
 			<div className="movie-reviews">
-				<span className={isOwner ? '' : 'link'}>{likes} {likeText}</span>&nbsp;&nbsp;| &nbsp;&nbsp;
-				<span className={isOwner ? '' : 'link'}>{hates} {hateText}</span>
+				<span onClick={() => this.addReview(1)} className="review-link">{likes} {likeText}</span>&nbsp;&nbsp;| &nbsp;&nbsp;
+				<span onClick={() => this.addReview(-1)} className="review-link">{hates} {hateText}</span>
 			</div>
 		)
-	} else {
-		reviews = (
-			<div className="movie-reviews">
-				<span>Be the first one to vote for this movie:</span> &nbsp;&nbsp;
-				<span className={isOwner ? '' : 'link'}>Like</span>&nbsp;&nbsp;| &nbsp;&nbsp;
-				<span className={isOwner ? '' : 'link'}>Hate</span>
-			</div>
-		)
+		return reviews
 	}
-	return reviews
-}
 
-const Movie = (props) => {
-	return (
-		<div className="movie-wrapper">
-			<div className="movie-title">{props.movie.title}</div>
-			<div className="posted-by">Posted by <span
-				className="link"> {getOwnerName(props.user, props.movie.owner)} </span>{getDaysDiff(props.movie.createdAt)}</div>
-			<q className="movie-description">{props.movie.description}</q>
-			{props.user ? getAuthenticatedReviews(props.movie.likes, props.movie.dislikes, isOwner(props.user, props.movie.owner)) : getReviews(props.movie.likes, props.movie.dislikes)}
-		</div>
-	)
+	addReview(status) {
+		let likes = this.state.likes;
+		let hates = this.state.hates;
+
+		if (status === 1) {
+			likes++;
+		} else {
+			hates++;
+		}
+		this.props.addReview(this.movie._id, { status }).then((response) => {
+			this.setState({
+				status,
+				likes,
+				hates,
+				userReviewId: response.data._id
+			});
+		})
+	}
+
+	updateReview(status) {
+		let likes = this.state.likes;
+		let hates = this.state.hates;
+
+		if (status === 1) {
+			likes++;
+			hates--;
+		} else {
+			likes--;
+			hates++;
+		}
+
+		this.props.updateReview(this.state.userReviewId, { status }).then(() => {
+			this.setState({
+				status,
+				likes,
+				hates
+			});
+		})
+	}
+
+	deleteReview() {
+		let likes = this.state.likes;
+		let hates = this.state.hates;
+
+		if (this.state.status === 1) {
+			likes--;
+		} else {
+			hates--;
+		}
+
+		this.props.deleteReview(this.state.userReviewId).then(() => {
+			this.setState({
+				status: 0,
+				likes,
+				hates
+			});
+		})
+	}
+
 };
 
 export default Movie;
