@@ -12,7 +12,7 @@ const Navbar = (props) => {
 
 			<div className="nav-link logged">
 				<div className="welcome-msg">
-					Welcome back <span className="link" onClick={() => props.getMovies()}>{props.user.name}</span>
+					Welcome back <span className="link"><Link to="/movies">{props.user.name}</Link></span>
 				</div>
 				<button onClick={() => props.logout()}>Logout</button>
 			</div>
