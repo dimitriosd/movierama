@@ -4,7 +4,7 @@
   "description": "Social sharing platform for movies",
   "main": "index.js",
   "scripts": {
-    "server": "env-cmd -f ./config/dev.env node server/index.js",
+    "server": "node server/index.js",
     "client": "npm start --prefix client",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "dev": "concurrently \"env-cmd -f ./config/dev.env nodemon server/index.js\" \"npm run client\"",

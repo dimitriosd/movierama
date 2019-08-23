@@ -17,7 +17,6 @@ app.use(reviewsRouter);
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(morgan('combined'));
 
-console.log("HEREEEE", process.NODE_ENV);
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
 	// Set static folder
