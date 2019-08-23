@@ -25,8 +25,12 @@ const MoviesList = (props) => {
 		});
 	}
 
-	const sortingChange = (event) => {
+	const handleSortingChange = (event) => {
 		props.getMovies(event, 'desc');
+	}
+
+	const handleResetFilters = (event) => {
+		props.getMovies(null, null, event);
 	}
 
 	let newMovieButton;
@@ -35,20 +39,28 @@ const MoviesList = (props) => {
 		newMovieButton = <button onClick={() => props.history.push('/add')}>New Movie</button>;
 	}
 
+	let ownerButton;
+
+	if (props.owner._id) {
+		ownerButton = <div className="owner-filter"
+		                   onClick={() => handleResetFilters('none')}>&#10005;&nbsp;{props.user && props.user._id === props.owner._id ? 'You' : props.owner.name}</div>
+	}
+
 	return (
 		<div className="movies-list-wrapper">
 			<nav className="options-wrapper">
 				<div className="sorting">
 					<span>Sort By:</span>
 					<div className={`sort-link ${props.sortBy === 'likes' ? 'sort-link-clicked' : ''}`} value="createdAt"
-					     onClick={() => sortingChange('likes')}>Likes
+					     onClick={() => handleSortingChange('likes')}>Likes
 					</div>
 					<div className={`sort-link ${props.sortBy === 'dislikes' ? 'sort-link-clicked' : ''}`}
-					     onClick={() => sortingChange('dislikes')}>Hates
+					     onClick={() => handleSortingChange('dislikes')}>Hates
 					</div>
 					<div className={`sort-link ${props.sortBy === 'createdAt' ? 'sort-link-clicked' : ''}`}
-					     onClick={() => sortingChange('createdAt')}>Date
+					     onClick={() => handleSortingChange('createdAt')}>Date
 					</div>
+					{ownerButton}
 				</div>
 				{newMovieButton}
 			</nav>

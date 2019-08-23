@@ -23,7 +23,11 @@ export class AppContextProvider extends Component {
 			sortBy: 'createdAt',
 			order: 'desc',
 			user: Cookies.getJSON('user') || null,
-			token: Cookies.get('token') || ""
+			token: Cookies.get('token') || "",
+			owner: {
+				_id: null,
+				name: null
+			}
 		}
 	}
 
@@ -32,18 +36,26 @@ export class AppContextProvider extends Component {
 	}
 
 	getMovies = (sortBy, order, owner) => {
+		const sortByParam = sortBy || this.state.sortBy;
+		const orderParam = order || this.state.order;
+		const ownerParam = owner || this.state.owner;
+
 		const _userId = this.state.user ? this.state.user._id : '';
 		return api.get(`/api/movies/${_userId}`, {
 			params: {
 				sortBy: `${sortBy || this.state.sortBy}:${order || this.state.order}`,
-				owner
+				owner: ownerParam._id
 			}
 		})
 			.then(response => {
 				this.setState({
 					movies: response.data,
-					sortBy: sortBy ? sortBy : 'createdAt',
-					order: order ? order : 'desc'
+					sortBy: sortByParam,
+					order: orderParam,
+					owner: {
+						_id: ownerParam._id,
+						name: ownerParam.name
+					}
 				})
 				return response;
 			})

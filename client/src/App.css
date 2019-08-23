@@ -26,17 +26,21 @@
 }
 
 .signup {
-  border-radius: 20px;
-  background-color: dodgerblue;
   text-decoration: none;
   outline: none;
-  width: 80px;
-  text-align: center;
+  padding-left: 0;
 }
 
 .signup a {
   color: white;
   text-decoration: none;
+  border-radius: 20px;
+  background-color: dodgerblue;
+  width: 80px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login span {
@@ -90,6 +94,7 @@
   align-items: center;
   padding: 10px;
   background-color: lightgray;
+  flex-direction: column;
 }
 
 .sorting {
@@ -220,9 +225,27 @@
   text-align: center;
 }
 
+.owner-filter {
+  cursor: pointer;
+  border-radius: 20px;
+  color: black;
+  background-color: whitesmoke;
+  text-decoration: none;
+  outline: none;
+  min-height: 20px;
+  border: none;
+  font-weight: bold;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
 @media screen and (min-width: 700px) {
   .options-wrapper {
     padding: 10px 10%;
+    flex-direction: row;
   }
 
   .movies-list {

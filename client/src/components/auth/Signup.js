@@ -43,7 +43,7 @@ class Signup extends Component {
 		return (
 			<div className="form-wrapper">
 				<form onSubmit={this.handleSubmit}>
-					<h3>Please enter your credentials</h3>
+					<h3>Please create account</h3>
 					<input
 						onChange={this.handleChange}
 						value={this.state.name}

@@ -18,7 +18,7 @@ class Movie extends Component {
 		return (
 			<div className="movie-wrapper">
 				<div className="movie-title">{this.movie.title}</div>
-				<div className="posted-by">Posted by <span onClick={() => this.props.getMovies(null, null, this.movie.owner._id)}
+				<div className="posted-by">Posted by <span onClick={() => this.props.getMovies(null, null, this.movie.owner)}
 					className="link"> {this.getOwnerName()} </span>{this.getDaysDiff()}
 				</div>
 				<q className="movie-description">{this.movie.description}</q>
