@@ -22,8 +22,8 @@ class LoginForm extends Component {
 		e.preventDefault();
 		this.props.login(this.state)
 			.then(() => this.props.history.push("/movies"))
-			.catch(err => {
-				this.setState({errorMessage: err.response.data.message})
+			.catch(() => {
+				this.setState({errorMessage: 'Incorrect credentials!'})
 			})
 	}
 

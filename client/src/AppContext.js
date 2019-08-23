@@ -61,11 +61,12 @@ export class AppContextProvider extends Component {
 		return api.post("/api/users", userInfo)
 			.then(response => {
 				const { user, token } = response.data;
-				Cookies.set("token", token);
-				Cookies.set("user", user);
+				Cookies.set("token", token, { secure: process.env.NODE_ENV === 'production' });
+				Cookies.set("user", user, { secure: process.env.NODE_ENV === 'production' });
 				this.setState({
 					user,
-					token
+					token,
+					movies: []
 				});
 				this.getMovies();
 				return response;
@@ -95,17 +96,17 @@ export class AppContextProvider extends Component {
 
 	login = (credentials) => {
 		return api.post("/api/users/login", credentials)
-			.then(response => {
+			.then(async response => {
 				const { token, user } = response.data;
-				Cookies.set("token", token)
-				Cookies.set("user", user)
-				this.setState({
+				Cookies.set("token", token, { secure: process.env.NODE_ENV === 'production' })
+				Cookies.set("user", user, { secure: process.env.NODE_ENV === 'production' })
+				await this.setState({
 					user,
-					token
-				}, () => {
-					this.getMovies();
-					return response;
+					token,
+					movies: []
 				});
+				this.getMovies();
+				return response;
 			})
 	}
 

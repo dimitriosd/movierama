@@ -137,12 +137,17 @@
   justify-content: center;
 }
 
+.form-wrapper p {
+  text-align: center;
+}
+
 .form-wrapper input {
   width: 70%;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid dodgerblue;
   margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .form-wrapper textarea {
@@ -153,6 +158,7 @@
   border: 1px solid dodgerblue;
   margin-bottom: 10px;
   resize: none;
+  font-size: 16px;
 }
 
 .submit-button {

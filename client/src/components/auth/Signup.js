@@ -57,7 +57,8 @@ class Signup extends Component {
 						name="password"
 						type="password"
 						placeholder="Password..."
-						required="required"/>
+						required="required"
+						minLength={7}/>
 					<button className="submit-button" type="submit">Sign Up</button>
 				</form>
 

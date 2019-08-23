@@ -1,6 +1,5 @@
 const express = require('express')
 const User = require('../models/user')
-const auth = require('../middleware/auth')
 const router = new express.Router()
 
 router.post('/api/users', async (req, res) => {
@@ -10,28 +9,22 @@ router.post('/api/users', async (req, res) => {
 		const token = await user.generateAuthToken()
 		res.status(201).send({ user, token })
 	} catch (e) {
-		res.status(400).send(e)
+		if (e.name === 'MongoError') {
+			res.status(400).send({ message: 'User already exists!'});
+		} else {
+			res.status(400).send(e)
+		}
 	}
 })
 
 router.post('/api/users/login', async (req, res) => {
 	try {
-		const user = await User.findByCredentials(req.body.name, req.body.password)
+		const user = await User.findByCredentials(req.body.name, req.body.password);
 		const token = await user.generateAuthToken()
 		res.send({ user, token })
 	} catch (e) {
-		res.status(400).send()
+		res.status(400).send(e)
 	}
 })
 
-router.get('/api/users/reviews', auth, async (req, res) => {
-	try {
-		await req.user.populate('reviews').execPopulate()
-		res.send(req.user.reviews)
-	} catch (e) {
-		res.status(500).send()
-	}
-})
-
-
-module.exports = router
+module.exports = router;
