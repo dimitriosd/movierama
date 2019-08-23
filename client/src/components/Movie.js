@@ -143,7 +143,7 @@ class Movie extends Component {
 		return reviews
 	}
 
-	addReview(status) {
+	async addReview(status) {
 		let likes = this.state.likes;
 		let hates = this.state.hates;
 
@@ -152,17 +152,19 @@ class Movie extends Component {
 		} else {
 			hates++;
 		}
+		await this.setState({
+			status,
+			likes,
+			hates
+		});
 		this.props.addReview(this.movie._id, { status }).then((response) => {
 			this.setState({
-				status,
-				likes,
-				hates,
 				userReviewId: response.data._id
 			});
 		})
 	}
 
-	updateReview(status) {
+	async updateReview(status) {
 		let likes = this.state.likes;
 		let hates = this.state.hates;
 
@@ -174,16 +176,16 @@ class Movie extends Component {
 			hates++;
 		}
 
-		this.props.updateReview(this.state.userReviewId, { status }).then(() => {
-			this.setState({
-				status,
-				likes,
-				hates
-			});
-		})
+		await this.setState({
+			status,
+			likes,
+			hates
+		});
+
+		this.props.updateReview(this.state.userReviewId, { status });
 	}
 
-	deleteReview() {
+	async deleteReview() {
 		let likes = this.state.likes;
 		let hates = this.state.hates;
 
@@ -193,13 +195,12 @@ class Movie extends Component {
 			hates--;
 		}
 
-		this.props.deleteReview(this.state.userReviewId).then(() => {
-			this.setState({
-				status: 0,
-				likes,
-				hates
-			});
-		})
+		await this.setState({
+			status: 0,
+			likes,
+			hates
+		});
+		this.props.deleteReview(this.state.userReviewId);
 	}
 
 };
