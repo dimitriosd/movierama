@@ -29,6 +29,9 @@
 - Run locally:
 ### `npm run dev`
 
+- To run eslint check:
+### `npm run lint`
+
 - To run integration tests:
 ### `npm run test`
 
