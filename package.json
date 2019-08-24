@@ -8,6 +8,7 @@
     "client": "npm start --prefix client",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "dev": "concurrently \"env-cmd -f ./config/dev.env nodemon server/index.js\" \"npm run client\"",
+    "lint": "eslint --ignore-path .gitignore .",
     "test": "env-cmd -f ./config/test.env jest --watch --runInBand",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
@@ -23,6 +24,9 @@
   },
   "devDependencies": {
     "env-cmd": "^9.0.3",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
     "jest": "24.8.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
