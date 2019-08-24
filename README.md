@@ -14,7 +14,7 @@
     your user directory to store the database data.
     You can start the server using the following command. Make sure to swap out
     “username” with the correct path to your users home directory.
-    /Users/{username}/mongodb/bin/mongod --dbpath=/Users/Andrew/mongodb-data
+    /Users/{username}/mongodb/bin/mongod --dbpath=/Users/{username}/mongodb-data
 
 - Install client dependencies:
 
