@@ -44,12 +44,13 @@ export class AppContextProvider extends Component {
 		return api.get(`/api/movies/${_userId}`, {
 			params: {
 				sortBy: `${sortBy || this.state.sortBy}:${order || this.state.order}`,
-				owner: ownerParam._id
+				owner: ownerParam._id,
+				page: 1
 			}
 		})
 			.then(response => {
 				this.setState({
-					movies: response.data,
+					movies: response.data.content,
 					sortBy: sortByParam,
 					order: orderParam,
 					owner: {

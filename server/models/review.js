@@ -27,6 +27,6 @@ const reviewSchema = new mongoose.Schema({
 
 reviewSchema.index({ owner: 1, movie: 1 }, { unique: true });
 
-const Review = mongoose.model('Review', reviewSchema)
+const Review = mongoose.model('Review', reviewSchema);
 
-module.exports = Review
+module.exports = Review;

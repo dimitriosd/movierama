@@ -1,6 +1,6 @@
-const express = require('express')
-const Review = require('../models/review')
-const auth = require('../middleware/auth')
+const express = require('express');
+const Review = require('../models/review');
+const auth = require('../middleware/auth');
 const router = new express.Router();
 const Movie = require('../models/movie');
 
@@ -28,7 +28,7 @@ router.post('/api/reviews/:movieId', auth, async (req, res) => {
 			} else {
 				await incrementDislikes(review);
 			}
-		})
+		});
 		res.status(201).send(review);
 	} catch (e) {
 		res.status(400).send(e);
@@ -83,7 +83,7 @@ router.delete('/api/reviews/:reviewId', auth, async (req, res) => {
 				} else {
 					await decrementDislikes(review);
 				}
-		})
+		});
 		if (!reviewToDelete) {
 			return res.status(404).send()
 		}
@@ -91,7 +91,7 @@ router.delete('/api/reviews/:reviewId', auth, async (req, res) => {
 	} catch (e) {
 		res.status(500).send(e)
 	}
-})
+});
 
 const incrementLikes = async (review) => {
 	return await Movie.findOneAndUpdate(

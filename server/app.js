@@ -4,11 +4,11 @@ const morgan = require('morgan');
 require('./db/mongoose')
 const path = require('path');
 
-const userRouter = require('./routers/user')
-const taskRouter = require('./routers/movie')
-const reviewsRouter = require('./routers/review')
+const userRouter = require('./routers/user');
+const taskRouter = require('./routers/movie');
+const reviewsRouter = require('./routers/review');
 
-const app = express()
+const app = express();
 
 app.use(express.json());
 app.use(userRouter);
@@ -27,4 +27,4 @@ if (process.env.NODE_ENV === 'production') {
 	});
 }
 
-module.exports = app
+module.exports = app;

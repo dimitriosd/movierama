@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const Movie = require('./movie')
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Movie = require('./movie');
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -30,13 +30,13 @@ userSchema.virtual('movies', {
 	ref: 'Movie',
 	localField: '_id',
 	foreignField: 'owner'
-})
+});
 
 userSchema.virtual('reviews', {
 	ref: 'Review',
 	localField: '_id',
 	foreignField: 'owner'
-})
+});
 
 userSchema.methods.toJSON = function () {
 	const user = this
@@ -46,7 +46,7 @@ userSchema.methods.toJSON = function () {
 	delete userObject.tokens
 
 	return userObject
-}
+};
 
 userSchema.methods.generateAuthToken = async function () {
 	const user = this
@@ -56,7 +56,7 @@ userSchema.methods.generateAuthToken = async function () {
 	await user.save()
 
 	return token
-}
+};
 
 userSchema.statics.findByCredentials = async (name, password) => {
 	const user = await User.findOne({ name })
@@ -71,7 +71,7 @@ userSchema.statics.findByCredentials = async (name, password) => {
 	}
 
 	return user
-}
+};
 
 userSchema.pre('save', async function (next) {
 	const user = this
@@ -80,14 +80,14 @@ userSchema.pre('save', async function (next) {
 		user.password = await bcrypt.hash(user.password, 8)
 	}
 	next()
-})
+});
 
 userSchema.pre('remove', async function (next) {
 	const user = this
 	await Movie.deleteMany( { owner: user._id})
 	next()
-})
+});
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema);
 
-module.exports = User
+module.exports = User;

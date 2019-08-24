@@ -1,6 +1,6 @@
-const express = require('express')
-const User = require('../models/user')
-const router = new express.Router()
+const express = require('express');
+const User = require('../models/user');
+const router = new express.Router();
 
 router.post('/api/users', async (req, res) => {
 	const user = new User(req.body)
@@ -15,7 +15,7 @@ router.post('/api/users', async (req, res) => {
 			res.status(400).send(e)
 		}
 	}
-})
+});
 
 router.post('/api/users/login', async (req, res) => {
 	try {
@@ -25,6 +25,6 @@ router.post('/api/users/login', async (req, res) => {
 	} catch (e) {
 		res.status(400).send(e)
 	}
-})
+});
 
 module.exports = router;

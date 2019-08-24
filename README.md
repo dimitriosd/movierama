@@ -2,12 +2,19 @@
 
 - Visit https://movierama-ddouras.herokuapp.com
 
-
 ## To run locally
 
 - Prerequisites 
- 1) You need to install MongoDB Compass from https://www.mongodb.com/products/compass, create new connection pointing to localhost:27017 and connect to the instance
- 2) You need to install latest node version
+ 1) Install Node JS.
+    You can get it at https://nodejs.org/en/
+    
+ 2) Install MongoDB. You can download the MongoDB Community Server from the MongoDB download page.
+    The download is a zip file. Unzip the contents, change the folder name to “mongodb”, and
+    move it to your users home directory. From there, create a “mongodb-data” directory in
+    your user directory to store the database data.
+    You can start the server using the following command. Make sure to swap out
+    “username” with the correct path to your users home directory.
+    /Users/{username}/mongodb/bin/mongod --dbpath=/Users/Andrew/mongodb-data
 
 - Install client dependencies:
 
@@ -21,4 +28,7 @@
 
 - Run locally:
 ### `npm run dev`
+
+- To run integration tests:
+### `npm run test`
 
