@@ -36,7 +36,7 @@ router.post('/api/reviews/:movieId', auth, async (req, res) => {
 
 		res.status(201).send(review);
 	} catch (e) {
-		await session.commitTransaction();
+		await session.abortTransaction();
 		session.endSession();
 		res.status(400).send(e);
 	}
@@ -107,7 +107,7 @@ router.delete('/api/reviews/:reviewId', auth, async (req, res) => {
 
 		res.send(reviewToDelete);
 	} catch (e) {
-		await session.commitTransaction();
+		await session.abortTransaction();
 		session.endSession();
 		res.status(500).send(e);
 	}
