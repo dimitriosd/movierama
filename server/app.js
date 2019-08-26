@@ -5,14 +5,14 @@ require('./db/mongoose')
 const path = require('path');
 
 const userRouter = require('./routers/user');
-const taskRouter = require('./routers/movie');
+const moviesRouter = require('./routers/movie');
 const reviewsRouter = require('./routers/review');
 
 const app = express();
 
 app.use(express.json());
 app.use(userRouter);
-app.use(taskRouter);
+app.use(moviesRouter);
 app.use(reviewsRouter);
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(morgan('combined'));
