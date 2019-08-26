@@ -51,23 +51,24 @@ router.patch('/api/reviews/:reviewId', auth, async (req, res) => {
 		res.status(400).send({ error: 'Invalid updates' });
 	}
 
+	const review = await Review.findOne({ _id: req.params.reviewId });
+	if (!review) {
+		return res.status(404).send();
+	}
+	if (review.status === req.body.status) {
+		return res.status(400).send({ error: 'Invalid updates' });
+	}
+
+	if (review.owner === req.user._id) {
+		return res.status(400).send({ error: 'You cannot vote for your own movie post' });
+	}
+
+	updates.forEach(update => review[update] = req.body[update]);
+
 	const session = await Review.startSession();
 	session.startTransaction();
 
 	try {
-		const review = await Review.findOne({ _id: req.params.reviewId });
-		if (!review) {
-			return res.status(404).send();
-		}
-		if (review.status === req.body.status) {
-			return res.status(400).send({ error: 'Invalid updates' });
-		}
-
-		if (review.owner === req.user._id) {
-			return res.status(400).send({ error: 'You cannot vote for your own movie post' });
-		}
-
-		updates.forEach(update => review[update] = req.body[update]);
 		await review.save();
 		if (review.status === 1) {
 			await changeFromDislikeToLike(review);
